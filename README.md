@@ -91,11 +91,11 @@ and selectors that can be used read the list of records and hook components into
 
 | Method | Description |
 | --- | --- |
-| `create({ params })` | Sends a POST request to /api/<resourceName> and stores the server's response in a record. |
-| `fetch({ params })` | Sends a GET request to /api/<resourceName> and stores the array of records returned by the server inside the slice. |
+| `create(params)` | Sends a POST request to /api/<resourceName> and stores the server's response in a record. |
+| `fetch(params)` | Sends a GET request to /api/<resourceName> and stores the array of records returned by the server inside the slice. |
 | `fetchById(id)` | Sends a GET request to /api/<resourceName>/id and stores the single record returned by the server inside the slice. |
-| `update({ params })` | Sends a PUT request to /api/<resourceName> and creates/updates a record in the slice using the server's response. |
-| `delete({ params })` | Sends a DELETE request to /api/<resourceName> then removes the record with the given _id from the list of records. |
+| `update(params)` | Sends a PUT request to /api/<resourceName> and creates/updates a record in the slice using the server's response. |
+| `delete(params)` | Sends a DELETE request to /api/<resourceName> then removes the record with the given _id from the list of records. |
 
 ### Selectors
 
@@ -103,7 +103,7 @@ and selectors that can be used read the list of records and hook components into
 | --- | --- |
 | `isLoaded()` | Returns true if the slice has been populated once or more with records (elsewise returns false). |
 | `getAll()` | Return a selector that will return the entire array of records inside. |
-| `fetch({ params })` | Sends a GET request to /api/<resourceName> and stores the array of records returned by the server inside the slice, merging with any existing records. |
+| `fetch(params)` | Sends a GET request to /api/<resourceName> and stores the array of records returned by the server inside the slice, merging with any existing records. |
 | `get(id)` | Returns a selector that will return the individual record (an object) with the specified id. |
 | `where(conditions)` | Returns a selector that returns all records matching the given conditions given as an object of key/value pairs eg. { attribute1: 'value1, ... }. |
 | `findBy(conditions)` | Same as where() but will return just the first matching record. |
