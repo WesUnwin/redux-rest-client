@@ -1,4 +1,7 @@
+[![npm version](https://badge.fury.io/js/redux-rest-client.svg)](https://badge.fury.io/js/redux-rest-client)
+
 # redux-rest-client
+
 A REST API client library for use with redux.
 This library allows you to setup CRUD actions &amp; reducers to interact with REST APIs,
 and uses redux to store a slice containing a list of records returned from a REST API.
