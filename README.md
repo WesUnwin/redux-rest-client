@@ -64,17 +64,44 @@ Each sub-class of RecordSet that you create and add to your store can they be us
     const dispatch = useDispatch();
     const messages = useSelector(ChatMessages.getAll());
 
+    useEffect(() => {
+      // On mount, send a GET /api/chat_messages request
+      dispatch(ChatMessages.fetch());
+
+      return () => dispatch(ChatMessages.clearRequest('fetch'));
+    }, []);
+
+    // Network request status for the "fetch" request
+    const requestStatus = useSelector(ChatMessages.getRequestStatus('fetch'));
+    const error = useSelector(ChatMessages.getError('fetch'));
+
+    const closeAlerts = () => {
+      dispatch(ChatMessages.clearRequest('fetch'));
+    };
+
     const onClick = {
+      // Sends a POST request to /api/chat_messages
       dispatch(ChatMessages.create({ text: "Hello World!" }));
     };
 
     return (
       <div>
+        {(requestStatus == 'pending') &&
+          <p>Loading..</p>
+        }
+
+        {error &&
+          <p style={{color: 'red'}} onClick={closeAlerts}>
+            {error.message}
+          </p>
+        }
+
         <ul>
           {messages.map(msg => (
             <li>{msg.text}</li>
           ))}
         </ul>
+
         <button onClick={onClick}>
           Send Chat Message
         </button>
