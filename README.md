@@ -12,7 +12,7 @@ This library internally uses window.fetch() to send requests to a given REST API
 npm install --save react-rest-client
 ```
 
-## Setting Up Your RecordSets
+## Setting Up Your RecordSet(s)
 To use this libary simply import RecordSet (default export of this package) and begin creating sub-classes that configure
 the necessary REST resources for using your system's REST APIs.
 
@@ -52,8 +52,8 @@ You must then add the reducer for the above subclass to your Redux store:
 ## Using Your RecordSet(s)
 Each sub-class of RecordSet that you create and add to your store can they be used to:
 
-1. Send requests to your REST APIs, via create()/read()/update()/delete() CRUD actions
-2. Read the list of records stored in the slice via a variety of selctors (eg. getAll() get(id), where(...))
+1. Send requests to your REST APIs, via CRUD actions (create()/read()/update()/delete())
+2. Read the list of records stored in the slice via a variety of selectors (eg. getAll() get(id), where(...))
 
 ```
   import ChatMessages from './features/ChatMessages';
