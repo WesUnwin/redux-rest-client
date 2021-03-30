@@ -102,8 +102,7 @@ and selectors that can be used read the list of records and hook components into
 | Method | Description |
 | --- | --- |
 | `isLoaded()` | Returns true if the slice has been populated once or more with records (elsewise returns false). |
-| `getAll()` | Return a selector that will return the entire array of records inside. |
-| `fetch(params)` | Sends a GET request to /api/<resourceName> and stores the array of records returned by the server inside the slice, merging with any existing records. |
+| `getAll()` | Return a selector that will return the entire array of records inside the slice. |
 | `get(id)` | Returns a selector that will return the individual record (an object) with the specified id. |
 | `where(conditions)` | Returns a selector that returns all records matching the given conditions given as an object of key/value pairs eg. { attribute1: 'value1, ... }. |
 | `findBy(conditions)` | Same as where() but will return just the first matching record. |
