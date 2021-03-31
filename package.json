@@ -11,6 +11,14 @@
     "type": "git",
     "url": "git+https://github.com/WesUnwin/redux-rest-client.git"
   },
+  "keywords": [
+    "redux",
+    "react",
+    "REST",
+    "client",
+    "api",
+    "CRUD"
+  ],
   "author": "WesUnwin",
   "license": "ISC",
   "bugs": {
