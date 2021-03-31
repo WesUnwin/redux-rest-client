@@ -11,16 +11,33 @@ describe('RecordSet', () => {
     createSelector = jest.fn(fn => fn);
 
     slice = {
-      reducer: 'reducer',
-      actions: {
-        updateRequest: jest.fn()
-      }
+      state: null,
+      reducer: 'reducer'
     };
 
-    createSlice = jest.fn(_config => slice);
+    createSlice = jest.fn(config => {
+      slice.state = config.initialState;
 
-    dispatch = jest.fn(_action => {
+      // Populate slice.actions based on reducers...
+      slice.actions = {};
+      for (const reducer in config.reducers) {
+        slice.actions[reducer] = function(payload) {
+          return function() {
+            console.log(`Invoking config.reducers[${reducer}]...`);
+            const action = { payload };
+            config.reducers[reducer](slice.state, action);
+            console.log('New state of slice: ', slice.state);
+          };
+        };
+      }
 
+
+      return slice;
+    });
+
+    dispatch = jest.fn(action => {
+      console.log('dispatch() invoked...');
+      action();
     });
 
     recordSet = new RecordSet('resource', { createSlice, createSelector });
@@ -34,9 +51,16 @@ describe('RecordSet', () => {
 
   describe('fetch', () => {
     describe('Request Successful', () => {
+      let records;
+
       beforeEach(() => {
+        records = [{ _id: 'sfjweojf', }, { _id: 'fjieos' }];
+
         const response = {
-          text: jest.fn(() => Promise.resolve(''))
+          text: jest.fn(() => Promise.resolve('')),
+          json: jest.fn(() => Promise.resolve(records)),
+          ok: true,
+          status: 200
         };
 
         global.window = {
