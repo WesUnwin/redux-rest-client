@@ -62,7 +62,7 @@ class RecordSet {
   constructor(resourceName, options = {}) {
     options.api = options.api || resourceName;
     this.resource = resourceName;
-    this.api = api;
+    this.api = options.api;
     if (!this.resource) {
       throw new Error('You must specify a resource name (eg. "chatMessages") (first argument to RecordSet contructor)');
     }
