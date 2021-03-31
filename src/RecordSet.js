@@ -73,6 +73,10 @@ class RecordSet {
       throw new Error('You must supply a second argument to the RecordSet constructor (options) containing at least createSlice() and createSelector() from @reduxjs/toolkit');
     }
 
+    if (options.fetchFunction) {
+      Requests.fetchFunction = options.fetchFunction;
+    }
+
     this._sortFunction = function(rec1, rec2) {
       // Sort by id by default
       if (rec1._id < rec2._id) return -1;

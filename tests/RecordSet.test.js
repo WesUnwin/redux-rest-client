@@ -52,11 +52,12 @@ describe('RecordSet', () => {
   describe('fetch', () => {
     describe('Request Successful', () => {
       let records;
+      let response;
 
       beforeEach(() => {
         records = [{ _id: 'sfjweojf', }, { _id: 'fjieos' }];
 
-        const response = {
+        response = {
           text: jest.fn(() => Promise.resolve('')),
           json: jest.fn(() => Promise.resolve(records)),
           ok: true,
@@ -68,12 +69,29 @@ describe('RecordSet', () => {
         };
       });
 
-      it('makes a GET request to /api/<resourcname>?<params> using window.fetch', () => {
-        const action = recordSet.fetch({ param1: 'value1', param2: 'value2' });
-        action(dispatch);
-        expect(window.fetch).toBeCalledWith('/api/resource?param1=value1&param2=value2', { method: 'GET', 'credentials': 'same-origin', headers: { 'Content-Type': 'application/json' } });
+      describe('default fetch function', () => {
+        it('makes a GET request to /api/<resourcname>?<params> using window.fetch', () => {
+          const action = recordSet.fetch({ param1: 'value1', param2: 'value2' });
+          action(dispatch);
+          expect(window.fetch).toBeCalledWith('/api/resource?param1=value1&param2=value2', { method: 'GET', 'credentials': 'same-origin', headers: { 'Content-Type': 'application/json' } });
+        });
+      });
+
+      describe('custom fetch function', () => {
+        let customFetchFunction;
+
+        beforeEach(() => {
+          customFetchFunction = jest.fn(() => Promise.resolve(response));
+          recordSet = new RecordSet('resource', { createSlice, createSelector, fetchFunction: customFetchFunction });
+        });
+
+        it('makes a GET request to /api/<resourcname>?<params> using window.fetch', () => {
+          const action = recordSet.fetch({ param1: 'value1', param2: 'value2' });
+          action(dispatch);
+          expect(window.fetch).not.toBeCalled();
+          expect(customFetchFunction).toBeCalledWith('/api/resource?param1=value1&param2=value2', { method: 'GET', 'credentials': 'same-origin', headers: { 'Content-Type': 'application/json' } });
+        });
       });
     });
-
   });
 });

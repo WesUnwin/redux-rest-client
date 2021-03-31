@@ -1,4 +1,6 @@
 class Requests {
+  static fetchFunction = Requests.defaultFetchFunction;
+
   static doRequest(method = 'GET', url = '/', params = {}, requestOptions = { json: true }, headers = {}) {
     const options = {
       method: method,
@@ -18,6 +20,10 @@ class Requests {
       options.body = JSON.stringify(params);
     }
 
+    return Requests.fetchFunction(url, options);
+  }
+
+  static defaultFetchFunction(url, options) {
     return window.fetch(url, options);
   }
 }

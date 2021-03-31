@@ -117,6 +117,19 @@ Each sub-class of RecordSet that you create and add to your store can they be us
 Your subclass will inherit actions - function that can be used to send requests to the associated REST API,
 and selectors that can be used read the list of records and hook components into re-rendering when needed.
 
+
+### Constructor
+The first argument should be a string identifying the name of the resource/slice (eg. "chatMessages", "accounts", etc)
+The second argument (options) is used to pass an object containing the following properties:
+
+| Option | Description |
+| --- | --- |
+| `createSlice` | (REQUIRED) should be set to { createSlice } from '@reduxjs/toolkit'. |
+| `createSelector` | (REQUIRED) should be set to { createSelector } from '@reduxjs/toolkit'. |
+| `api` | (OPTIONAL) defaults to the lower-cased resourceName (first constructor arg), customizes the url for requests: "/api/<options.api>". |
+| `fetchFunction` | (OPTIONAL) a function that will be called instead of directly calling window.fetch(). Use this to customize how requests are performed in your app. Defaults to (url, options) => window.fetch(url, options). |
+
+
 ### Actions
 
 | Method | Description |
@@ -126,6 +139,7 @@ and selectors that can be used read the list of records and hook components into
 | `fetchById(id)` | Sends a GET request to /api/<resourceName>/id and stores the single record returned by the server inside the slice. |
 | `update(params)` | Sends a PUT request to /api/<resourceName> and creates/updates a record in the slice using the server's response. |
 | `delete(params)` | Sends a DELETE request to /api/<resourceName> then removes the record with the given _id from the list of records. |
+
 
 ### Selectors
 
