@@ -29,7 +29,7 @@ import { createSlice, createSelector } from '@reduxjs/toolkit';
 
 class ChatMessages extends RecordSet {
   constructor() {
-    super('chatMessages', { api: 'chat_messages', createSlice: createSlice, createSelector: createSelector });
+    super('chatMessages', { api: 'chat_messages', createSlice, createSelector });
   }
 }
      
