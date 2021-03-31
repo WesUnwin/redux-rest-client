@@ -2,8 +2,9 @@
   "name": "redux-rest-client",
   "version": "0.0.0",
   "description": "REST API client for redux",
-  "main": "src/index.js",
+  "main": "dist/index.js",
   "scripts": {
+    "build": "npx babel src --out-dir dist",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -19,6 +20,7 @@
   "devDependencies": {
     "@babel/cli": "^7.13.14",
     "@babel/core": "^7.13.14",
+    "@babel/plugin-proposal-class-properties": "^7.13.0",
     "@babel/preset-env": "^7.13.12"
   }
 }
