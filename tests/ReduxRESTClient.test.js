@@ -40,7 +40,7 @@ describe('ReduxRESTClient', () => {
       action();
     });
 
-    restClient = new ReduxRESTClient('resource', { createSlice, createSelector });
+    restClient = new ReduxRESTClient('resource', { path: '/path', createSlice, createSelector });
   });
 
   describe('getReducer', () => {
@@ -70,10 +70,10 @@ describe('ReduxRESTClient', () => {
       });
 
       describe('default fetch function', () => {
-        it('makes a GET request to /api/<resourcname>?<params> using window.fetch', () => {
+        it('makes a GET request to /path?<params> using window.fetch', () => {
           const action = restClient.fetch({ param1: 'value1', param2: 'value2' });
           action(dispatch);
-          expect(window.fetch).toBeCalledWith('/api/resource?param1=value1&param2=value2', { method: 'GET', 'credentials': 'same-origin', headers: { 'Content-Type': 'application/json' } });
+          expect(window.fetch).toBeCalledWith('/path?param1=value1&param2=value2', { method: 'GET', 'credentials': 'same-origin', headers: { 'Content-Type': 'application/json' } });
         });
       });
 
@@ -85,11 +85,11 @@ describe('ReduxRESTClient', () => {
           restClient = new ReduxRESTClient('resource', { createSlice, createSelector, fetchFunction: customFetchFunction });
         });
 
-        it('makes a GET request to /api/<resourcname>?<params> using window.fetch', () => {
+        it('makes a GET request to /path?<params> using window.fetch', () => {
           const action = restClient.fetch({ param1: 'value1', param2: 'value2' });
           action(dispatch);
           expect(window.fetch).not.toBeCalled();
-          expect(customFetchFunction).toBeCalledWith('/api/resource?param1=value1&param2=value2', { method: 'GET', 'credentials': 'same-origin', headers: { 'Content-Type': 'application/json' } });
+          expect(customFetchFunction).toBeCalledWith('/resource?param1=value1&param2=value2', { method: 'GET', 'credentials': 'same-origin', headers: { 'Content-Type': 'application/json' } });
         });
       });
     });

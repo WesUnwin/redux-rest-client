@@ -29,7 +29,7 @@ import { createSlice, createSelector } from '@reduxjs/toolkit';
 
 class ChatMessages extends ReduxRESTClient {
   constructor() {
-    super('chatMessages', { api: 'chat_messages', createSlice, createSelector });
+    super('chatMessages', { path: '/chat_messages', createSlice, createSelector });
   }
 }
      
@@ -68,7 +68,7 @@ Each sub-class of ReduxRESTClient that you create and add to your store can they
     const messages = useSelector(ChatMessages.getAll());
 
     useEffect(() => {
-      // On mount, send a GET /api/chat_messages request
+      // On mount, send a GET /chat_messages request
       dispatch(ChatMessages.fetch());
 
       return () => dispatch(ChatMessages.clearRequest('fetch'));
@@ -83,7 +83,7 @@ Each sub-class of ReduxRESTClient that you create and add to your store can they
     };
 
     const onClick = {
-      // Sends a POST request to /api/chat_messages
+      // Sends a POST request to /chat_messages
       dispatch(ChatMessages.create({ text: "Hello World!" }));
     };
 
@@ -126,7 +126,7 @@ The second argument (options) is used to pass an object containing the following
 | --- | --- |
 | `createSlice` | (REQUIRED) should be set to { createSlice } from '@reduxjs/toolkit'. |
 | `createSelector` | (REQUIRED) should be set to { createSelector } from '@reduxjs/toolkit'. |
-| `api` | (OPTIONAL) defaults to the lower-cased resourceName (first constructor arg), customizes the url for requests: "/api/<options.api>". |
+| `path` | (OPTIONAL) defaults to the lower-cased resourceName (first constructor arg), customizes the base path for the REST API default: "/<ResourceName>". |
 | `fetchFunction` | (OPTIONAL) a function that will be called instead of directly calling window.fetch(). Use this to customize how requests are performed in your app. Defaults to (url, options) => window.fetch(url, options). |
 
 
@@ -134,11 +134,11 @@ The second argument (options) is used to pass an object containing the following
 
 | Method | Description |
 | --- | --- |
-| `create(params)` | Sends a POST request to /api/<resourceName> and stores the server's response in a record. |
-| `fetch(params)` | Sends a GET request to /api/<resourceName> and stores the array of records returned by the server inside the slice. |
-| `fetchById(id)` | Sends a GET request to /api/<resourceName>/id and stores the single record returned by the server inside the slice. |
-| `update(params)` | Sends a PUT request to /api/<resourceName> and creates/updates a record in the slice using the server's response. |
-| `delete(params)` | Sends a DELETE request to /api/<resourceName> then removes the record with the given _id from the list of records. |
+| `create(params)` | Sends a POST request to <options.path> and stores the server's response in a record. |
+| `fetch(params)` | Sends a GET request to <options.path> and stores the array of records returned by the server inside the slice. |
+| `fetchById(id)` | Sends a GET request to <options.path>/id and stores the single record returned by the server inside the slice. |
+| `update(params)` | Sends a PUT request to <options.path> and creates/updates a record in the slice using the server's response. |
+| `delete(params)` | Sends a DELETE request to <options.path> then removes the record with the given _id from the list of records. |
 
 
 ### Selectors

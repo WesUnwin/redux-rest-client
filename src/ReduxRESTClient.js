@@ -60,9 +60,9 @@ class ReduxRESTClient {
    *  
    */   
   constructor(resourceName, options = {}) {
-    options.api = options.api || resourceName;
+    options.path = options.path || `/${resourceName}`;
     this.resource = resourceName;
-    this.api = options.api;
+    this.path = options.path;
     if (!this.resource) {
       throw new Error('You must specify a resource name (eg. "chatMessages") (first argument to RecordSet contructor)');
     }
@@ -281,7 +281,7 @@ class ReduxRESTClient {
         this._updateRequest(dispatch, 'fetch', null, error);
       };
 
-      return Requests.doRequest('GET', `/api/${this.api.toLowerCase()}`, params).then(onFetched, onFailure);
+      return Requests.doRequest('GET', this.path, params).then(onFetched, onFailure);
     };    
   }
 
@@ -305,7 +305,7 @@ class ReduxRESTClient {
         this._updateRequest(dispatch, 'fetchById', null, error);
       };
 
-      return Requests.doRequest('GET', `/api/${this.api.toLowerCase()}/${id}`).then(onFetched, onFailure);
+      return Requests.doRequest('GET', `${this.path}/${id}`).then(onFetched, onFailure);
     };
   }
 
@@ -329,7 +329,7 @@ class ReduxRESTClient {
         this._updateRequest(dispatch, 'create', null, error);
       };
 
-      return Requests.doRequest('POST', `/api/${this.api.toLowerCase()}`, params).then(onCreated, onFailure);
+      return Requests.doRequest('POST', this.path, params).then(onCreated, onFailure);
     };    
   }
 
@@ -352,7 +352,7 @@ class ReduxRESTClient {
         this._updateRequest(dispatch, 'update', null, error);
       };
 
-      return Requests.doRequest('PUT', `/api/${this.api.toLowerCase()}`, params).then(onUpdated, onFailure);
+      return Requests.doRequest('PUT', this.path, params).then(onUpdated, onFailure);
     };    
   }
 
@@ -373,7 +373,7 @@ class ReduxRESTClient {
         this._updateRequest(dispatch, 'delete', null, error);
       };
 
-      return Requests.doRequest('DELETE', `/api/${this.api.toLowerCase()}`, params).then(onDeleted, onFailure);
+      return Requests.doRequest('DELETE', this.path, params).then(onDeleted, onFailure);
     };
   }
 
