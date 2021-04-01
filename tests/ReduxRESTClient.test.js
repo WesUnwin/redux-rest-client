@@ -1,7 +1,7 @@
-import RecordSet from '../dist/index'; // Run npm run build first
+import ReduxRESTClient from '../dist/index'; // Run npm run build first
 
-describe('RecordSet', () => {
-  let recordSet;
+describe('ReduxRESTClient', () => {
+  let restClient;
   let createSlice;
   let createSelector;
   let slice;
@@ -40,12 +40,12 @@ describe('RecordSet', () => {
       action();
     });
 
-    recordSet = new RecordSet('resource', { createSlice, createSelector });
+    restClient = new ReduxRESTClient('resource', { createSlice, createSelector });
   });
 
   describe('getReducer', () => {
     it('returns the slice\'s reducer', () => {
-      expect(recordSet.getReducer()).toBe(slice.reducer);
+      expect(restClient.getReducer()).toBe(slice.reducer);
     });
   });
 
@@ -71,7 +71,7 @@ describe('RecordSet', () => {
 
       describe('default fetch function', () => {
         it('makes a GET request to /api/<resourcname>?<params> using window.fetch', () => {
-          const action = recordSet.fetch({ param1: 'value1', param2: 'value2' });
+          const action = restClient.fetch({ param1: 'value1', param2: 'value2' });
           action(dispatch);
           expect(window.fetch).toBeCalledWith('/api/resource?param1=value1&param2=value2', { method: 'GET', 'credentials': 'same-origin', headers: { 'Content-Type': 'application/json' } });
         });
@@ -82,11 +82,11 @@ describe('RecordSet', () => {
 
         beforeEach(() => {
           customFetchFunction = jest.fn(() => Promise.resolve(response));
-          recordSet = new RecordSet('resource', { createSlice, createSelector, fetchFunction: customFetchFunction });
+          restClient = new ReduxRESTClient('resource', { createSlice, createSelector, fetchFunction: customFetchFunction });
         });
 
         it('makes a GET request to /api/<resourcname>?<params> using window.fetch', () => {
-          const action = recordSet.fetch({ param1: 'value1', param2: 'value2' });
+          const action = restClient.fetch({ param1: 'value1', param2: 'value2' });
           action(dispatch);
           expect(window.fetch).not.toBeCalled();
           expect(customFetchFunction).toBeCalledWith('/api/resource?param1=value1&param2=value2', { method: 'GET', 'credentials': 'same-origin', headers: { 'Content-Type': 'application/json' } });

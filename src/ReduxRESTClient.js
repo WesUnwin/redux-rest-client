@@ -11,7 +11,7 @@ const statusTextOverride = {
   409: 'Conflict - unable to perform this action'
 };
 
-class RecordSet {
+class ReduxRESTClient {
   /**
    *  USAGE:
    *  Sub-class this to define a new type of resource. createSlice() which you must pass in from the redux library will
@@ -393,4 +393,4 @@ class RecordSet {
   };
 }
 
-export default RecordSet;
+export default ReduxRESTClient;

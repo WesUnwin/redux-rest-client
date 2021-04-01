@@ -1,3 +1,3 @@
-import RecordSet from "./RecordSet";
+import ReduxRESTClient from "./ReduxRESTClient";
 
-export default RecordSet;
+export default ReduxRESTClient;
