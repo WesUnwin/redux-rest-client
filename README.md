@@ -118,7 +118,7 @@ Each sub-class of ReduxRESTClient that you create and add to your store can they
 ## Records
 Each ReduxRESTClient internaly stores an array of records (such as rows from a database) returned from the REST API.
 Each record must be unique by the field "_id". The "_id" is used to update records of the same "_id".
-
+Records are plain javascript objects.
 
 ## ReduxRESTClient API
 Your subclass will inherit actions - function that can be used to send requests to the associated REST API,
