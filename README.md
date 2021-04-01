@@ -120,6 +120,44 @@ Each ReduxRESTClient internaly stores an array of records (such as rows from a d
 Each record must be unique by the field "_id". The "_id" is used to update records of the same "_id".
 Records are plain javascript objects.
 
+## Commonizing Configuration Across Your App
+Depending on your situation you may want to introduce a super class to commonize configuration across all your rest clients.
+An easy way to achieve this is to create a class (lets call it RecordSet) that all your rest client's extend, that in turn extends ReduxRESTClient:
+```
+  ChatMessages, Accounts, ... => extends => RecordSet => extends ReduxRESTClient
+```
+
+Inside your RecordSet class, you can perform tasks that should be common to all rest clients:
+```
+import { createSlice, createSelector } from '@reduxjs/toolkit';
+import ReduxRESTClient from 'redux-rest-client';
+import UserAccount from 'client/features/UserAccount';
+
+class RecordSet extends ReduxRESTClient {
+  constructor(resourceName, api = resourceName) {
+    super(resourceName, { path: `/api/${api}`, createSlice: createSlice, createSelector: createSelector, fetchFunction: RecordSet._fetchFunction });
+  }
+
+  static _fetchFunction(url, options) {
+    const accountJWT = UserAccount.getJWT();
+    if (accountJWT) {
+      options.headers['authorization'] = `BEARER ${accountJWT}`;
+    }
+
+    return window.fetch(url, options);
+  }
+}
+
+export default RecordSet;
+```
+
+Now ChatMessages would become:
+```
+class ChatMessages extends RecordSet {
+  ...
+}
+```
+
 ## ReduxRESTClient API
 Your subclass will inherit actions - function that can be used to send requests to the associated REST API,
 and selectors that can be used read the list of records and hook components into re-rendering when needed.
