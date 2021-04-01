@@ -2,38 +2,40 @@
 
 # redux-rest-client
 
-A REST API client library for use with redux.
-This library allows you to setup CRUD actions &amp; reducers to interact with REST APIs,
-and uses redux to store a slice containing a list of records returned from a REST API.
+A REST API client library, for use with redux (react-redux and @reduxjs/toolkit).
 
-Records are storred in a redux slice (using Redux's createSlice()).
+This library allows you to use redux to implement the common tasks of interfacing with REST APIs and storring an array of records obtained from each REST API.
 
-This library internally uses window.fetch() to send requests to a given REST API.
+Records are storred in a redux slice, using Redux's ```createSlice()```.
+
+This library internally uses window.fetch() to send requests, but can be configured to use something else.
 
 ## Installation
 ```
-npm install --save react-rest-client
+  npm install --save react-rest-client
 ```
 
 ## Setting Up Your ReduxRESTClient(s)
-To use this libary simply import ReduxRESTClient (default export of this package) and begin creating sub-classes that configure
+To use this libary simply import ReduxRESTClient (the default export of this package) and begin creating sub-classes to configure
 the necessary REST resources for using your system's REST APIs.
 
-Sub-class this to define a new type of resource. createSlice() which you must pass in from the redux library will
-be used to setup a slice containing CRUD actions & reducers, necessary to manage a _list of records in the redux slice.
+Each sub-class is used to store records of a given type (a resource).
+The sub-class fetches records by interfacing with a REST API to create/read/update/delete (CRUD) records of a given type.
 
-EXAMPLE: ChatMessages.js  (Inside your app)
+createSlice(), which you must pass in from the redux library will be used to setup a slice containing CRUD actions & reducers, necessary to manage a list of records in the redux slice.
+
+Example: ChatMessages.js  (Inside your app)
 ```
-import ReduxRESTClient from 'redux-rest-client';
-import { createSlice, createSelector } from '@reduxjs/toolkit';
+  import ReduxRESTClient from 'redux-rest-client';
+  import { createSlice, createSelector } from '@reduxjs/toolkit';
 
-class ChatMessages extends ReduxRESTClient {
-  constructor() {
-    super('chatMessages', { path: '/chat_messages', createSlice, createSelector });
+  class ChatMessages extends ReduxRESTClient {
+    constructor() {
+      super('chatMessages', { path: '/chat_messages', createSlice, createSelector });
+    }
   }
-}
-     
-export default ChatMessages;
+      
+  export default ChatMessages;
 ```
 
 ## Adding to Your Redux Store
@@ -189,6 +191,5 @@ function(rec1, rec2) {
   if (rec1._id < rec2._id) return -1;
   if (rec1._id > rec2._id) return 1;
   return 0;
-};
-
+}
 ```
