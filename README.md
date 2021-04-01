@@ -15,8 +15,8 @@ This library internally uses window.fetch() to send requests to a given REST API
 npm install --save react-rest-client
 ```
 
-## Setting Up Your RecordSet(s)
-To use this libary simply import RecordSet (default export of this package) and begin creating sub-classes that configure
+## Setting Up Your ReduxRESTClient(s)
+To use this libary simply import ReduxRESTClient (default export of this package) and begin creating sub-classes that configure
 the necessary REST resources for using your system's REST APIs.
 
 Sub-class this to define a new type of resource. createSlice() which you must pass in from the redux library will
@@ -24,10 +24,10 @@ be used to setup a slice containing CRUD actions & reducers, necessary to manage
 
 EXAMPLE: ChatMessages.js  (Inside your app)
 ```
-import RecordSet from 'redux-rest-client';
+import ReduxRESTClient from 'redux-rest-client';
 import { createSlice, createSelector } from '@reduxjs/toolkit';
 
-class ChatMessages extends RecordSet {
+class ChatMessages extends ReduxRESTClient {
   constructor() {
     super('chatMessages', { api: 'chat_messages', createSlice, createSelector });
   }
@@ -52,8 +52,8 @@ You must then add the reducer for the above subclass to your Redux store:
   export default store;
 ```
 
-## Using Your RecordSet(s)
-Each sub-class of RecordSet that you create and add to your store can they be used to:
+## Using Your ReduxRESTClient(s)
+Each sub-class of ReduxRESTClient that you create and add to your store can they be used to:
 
 1. Send requests to your REST APIs, via CRUD actions (create()/read()/update()/delete())
 2. Read the list of records stored in the slice via a variety of selectors (eg. getAll() get(id), where(...))
@@ -62,7 +62,7 @@ Each sub-class of RecordSet that you create and add to your store can they be us
   import ChatMessages from './features/ChatMessages';
   import { useDispatch, useSelector } from 'react-redux';
 
-  // A React JS component that makes use of the ChatMessages RecordSet.
+  // A React JS component that makes use of the ChatMessages ReduxRESTClient.
   const ChatMessages = () => {
     const dispatch = useDispatch();
     const messages = useSelector(ChatMessages.getAll());
@@ -113,7 +113,7 @@ Each sub-class of RecordSet that you create and add to your store can they be us
   }
 ```
 
-## RecordSet API
+## ReduxRESTClient API
 Your subclass will inherit actions - function that can be used to send requests to the associated REST API,
 and selectors that can be used read the list of records and hook components into re-rendering when needed.
 
