@@ -62,6 +62,7 @@ class ReduxRESTClient {
   constructor(resourceName, options = {}) {
     options.path = options.path || `/${resourceName}`;
     this.resource = resourceName;
+    this._idField = options.idField || '_id';
     this.path = options.path;
     if (!this.resource) {
       throw new Error('You must specify a resource name (eg. "chatMessages") (first argument to RecordSet contructor)');
@@ -77,10 +78,10 @@ class ReduxRESTClient {
       Requests.fetchFunction = options.fetchFunction;
     }
 
-    this._sortFunction = function(rec1, rec2) {
+    this._sortFunction = (rec1, rec2) => {
       // Sort by id by default
-      if (rec1._id < rec2._id) return -1;
-      if (rec1._id > rec2._id) return 1;
+      if (rec1[this._idField] < rec2[this._idField]) return -1;
+      if (rec1[this._idField] > rec2[this._idField]) return 1;
       return 0;
     };
 
@@ -107,8 +108,8 @@ class ReduxRESTClient {
           state.records.sort(this._sortFunction);
         },
         deleted: (state, action) => {
-          if (action.payload._id) {
-            state.records = state.records.filter(rec => rec._id != action.payload._id);
+          if (action.payload[this._idField]) {
+            state.records = state.records.filter(rec => rec[this._idField] != action.payload[this._idField]);
             state.records.sort(this._sortFunction);
           } else if (action.payload.all) {
             state.records = [];
@@ -157,7 +158,7 @@ class ReduxRESTClient {
   get(id) {
     return this.createSelector(
       state => state[`${this.resource}`].records,
-      records => records.find(rec => rec._id == id)
+      records => records.find(rec => rec[this._idField] == id)
     );
   }
 
@@ -378,7 +379,7 @@ class ReduxRESTClient {
     //this.onNewRecord(newRec);
     let existingRec = false;
     records.forEach(rec => {
-      if (rec._id == newRec._id) {
+      if (rec[this._idField] == newRec[this._idField]) {
         existingRec = true;
         // Update existing record, overwriting each property found in newRec
         for (const property in newRec) {

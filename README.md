@@ -135,7 +135,7 @@ The second argument (options) is used to pass an object containing the following
 | `createSelector` | (REQUIRED) should be set to { createSelector } from '@reduxjs/toolkit'. |
 | `path` | (OPTIONAL) defaults to the lower-cased resourceName (first constructor arg), customizes the base path for the REST API default: "/<ResourceName>". |
 | `fetchFunction` | (OPTIONAL) a function that will be called instead of directly calling window.fetch(). Use this to customize how requests are performed in your app. Defaults to (url, options) => window.fetch(url, options). |
-
+| `idField` | (OPTIONAL) Used to specify which field/property records should be unique by (for merging and sorting). Default: '_id' |
 
 ### Actions
 
