@@ -125,6 +125,9 @@ class ReduxRESTClient {
         clearRequest: (state, action) => {
           state.requests[action.payload.requestType] = null;
         },
+        clearError: state => {
+          state.error = null;
+        },
         clear: state => {
           state.isLoaded = false;
           state.records = [];
@@ -215,6 +218,10 @@ class ReduxRESTClient {
     }
 
     return this._slice.actions.clearRequest({ requestType: requestType });
+  }
+
+  clearError() {
+    return this._slice.actions.clearError();
   }
 
   onRecordReceived(record) {
