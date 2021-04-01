@@ -113,6 +113,11 @@ Each sub-class of ReduxRESTClient that you create and add to your store can they
   }
 ```
 
+## Records
+Each ReduxRESTClient internaly stores an array of records (such as rows from a database) returned from the REST API.
+Each record must be unique by the field "_id". The "_id" is used to update records of the same "_id".
+
+
 ## ReduxRESTClient API
 Your subclass will inherit actions - function that can be used to send requests to the associated REST API,
 and selectors that can be used read the list of records and hook components into re-rendering when needed.
@@ -132,16 +137,37 @@ The second argument (options) is used to pass an object containing the following
 
 ### Actions
 
+NOTE: The below action methods create and return action. The action must then be dispatched, in order to be executed.
+
+```
+  import { useDispatch } from 'react-redux';
+  ...
+  const dispatch = useDispatch();
+  ...
+  const action = MyRestClient.create(...);
+  dispatch(action);
+```
+
 | Method | Description |
 | --- | --- |
-| `create(params)` | Sends a POST request to <options.path> and stores the server's response in a record. |
-| `fetch(params)` | Sends a GET request to <options.path> and stores the array of records returned by the server inside the slice. |
-| `fetchById(id)` | Sends a GET request to <options.path>/id and stores the single record returned by the server inside the slice. |
-| `update(params)` | Sends a PUT request to <options.path> and creates/updates a record in the slice using the server's response. |
-| `delete(params)` | Sends a DELETE request to <options.path> then removes the record with the given _id from the list of records. |
+| `create(params)` | Returns an action that sends a POST request to <options.path> and stores the server's response in a record. |
+| `fetch(params)` | Returns an action that sends a GET request to <options.path> and stores the array of records returned by the server inside the slice. |
+| `fetchById(id)` | Returns an action that sends a GET request to <options.path>/id and stores the single record returned by the server inside the slice. |
+| `update(params)` | Returns an action that sends a PUT request to <options.path> and creates/updates a record in the slice using the server's response. |
+| `delete(params)` | Returns an action that sends a DELETE request to <options.path> then removes the record with the given _id from the list of records. |
+| `clearRequest(requestType)` | Returns an action that would clear the request status. This is done automatically starting a new request automatically.  |
 
 
 ### Selectors
+Selectors in redux are how you read state, and respond to state changes.
+
+NOTE: The below methods return a selector, and the selector must be used with useSelector() or similar.
+
+```
+  import { useSelector } from 'react-redux';
+  ...
+  const records = useSelector(MyRestClient.getAll());
+```
 
 | Method | Description |
 | --- | --- |
@@ -150,3 +176,19 @@ The second argument (options) is used to pass an object containing the following
 | `get(id)` | Returns a selector that will return the individual record (an object) with the specified id. |
 | `where(conditions)` | Returns a selector that returns all records matching the given conditions given as an object of key/value pairs eg. { attribute1: 'value1, ... }. |
 | `findBy(conditions)` | Same as where() but will return just the first matching record. |
+| `getRequestStatus(requestType)` | Returns an object of the form: ```{ status: 'pending'/'failed'/'succeeded', statusCode: 200, data: {}, error: ErrorObject }``` representing the state of the given request. Valid request types are: 'create', 'fetch', 'fetchById', 'update', 'delete'. |
+
+### Sorting
+The list of records inside each rest client are sorted by _id by default. In ascending order (larger _id later in the array).
+You can customize the order of records are stored by using setSortFunction(function).
+
+The default sort function is:
+```
+function(rec1, rec2) {
+  // Sort by id by default
+  if (rec1._id < rec2._id) return -1;
+  if (rec1._id > rec2._id) return 1;
+  return 0;
+};
+
+```
