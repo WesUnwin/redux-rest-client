@@ -12,7 +12,7 @@ This library internally uses window.fetch() to send requests, but can be configu
 
 ## Installation
 ```
-  npm install --save react-rest-client
+  npm install --save redux-rest-client
 ```
 
 ## Setting Up Your ReduxRESTClient(s)
