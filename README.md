@@ -122,20 +122,20 @@ Records are plain javascript objects.
 
 ## Commonizing Configuration Across Your App
 Depending on your situation you may want to introduce a super class to commonize configuration across all your rest clients.
-An easy way to achieve this is to create a class (lets call it RecordSet) that all your rest client's extend, that in turn extends ReduxRESTClient:
+An easy way to achieve this is to create a class (lets call it RESTClientBase) that all your rest client's extend, that in turn extends ReduxRESTClient:
 ```
-  ChatMessages, Accounts, ... => extends => RecordSet => extends ReduxRESTClient
+  ChatMessages, Accounts, ... => extends => RESTClientBase => extends ReduxRESTClient
 ```
 
-Inside your RecordSet class, you can perform tasks that should be common to all rest clients:
+Inside your RESTClientBase class, you can perform tasks that should be common to all rest clients:
 ```
 import { createSlice, createSelector } from '@reduxjs/toolkit';
 import ReduxRESTClient from 'redux-rest-client';
 import UserAccount from 'client/features/UserAccount';
 
-class RecordSet extends ReduxRESTClient {
+class RESTClientBase extends ReduxRESTClient {
   constructor(resourceName, api = resourceName) {
-    super(resourceName, { path: `/api/${api}`, createSlice: createSlice, createSelector: createSelector, fetchFunction: RecordSet._fetchFunction });
+    super(resourceName, { path: `/api/${api}`, createSlice: createSlice, createSelector: createSelector, fetchFunction: RESTClientBase._fetchFunction });
   }
 
   static _fetchFunction(url, options) {
@@ -148,12 +148,12 @@ class RecordSet extends ReduxRESTClient {
   }
 }
 
-export default RecordSet;
+export default RESTClientBase;
 ```
 
 Now ChatMessages would become:
 ```
-class ChatMessages extends RecordSet {
+class ChatMessages extends RESTClientBase {
   ...
 }
 ```
