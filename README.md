@@ -41,7 +41,7 @@ Example: ChatMessages.js  (Inside your app)
 ## Adding to Your Redux Store
 You must then add the reducer for the above subclass to your Redux store:
 ```
-  import ChatMessages from './features/ChatMessage'; // The above example file
+  import ChatMessages from './features/ChatMessages'; // The above example file
   import { configureStore } from '@reduxjs/toolkit';
   
   const store = configureStore({
