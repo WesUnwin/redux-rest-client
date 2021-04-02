@@ -23,7 +23,7 @@ class ReduxRESTClient {
    * 
    *  class ChatMessages extends RecordSet {
    *    constructor() {
-   *      super('chatMessages', { path: 'chat_messages', createSlice: createSlice, createSelector: createSelector });
+   *      super('chatMessages', { path: '/chat_messages', createSlice: createSlice, createSelector: createSelector });
    *    }
    *  }
    * 
