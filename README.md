@@ -31,7 +31,7 @@ Example: ChatMessages.js  (Inside your app)
 
   class ChatMessages extends ReduxRESTClient {
     constructor() {
-      super('chatMessages', { path: '/chat_messages', createSlice: createSlice, createSelector: createSelector });
+      super('chatMessages', { createSlice: createSlice, createSelector: createSelector });
     }
   }
       
