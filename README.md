@@ -31,11 +31,11 @@ Example: ChatMessages.js  (Inside your app)
 
   class ChatMessages extends ReduxRESTClient {
     constructor() {
-      super('chatMessages', { path: '/chat_messages', createSlice, createSelector });
+      super('chatMessages', { path: '/chat_messages', createSlice: createSlice, createSelector: createSelector });
     }
   }
       
-  export default ChatMessages;
+  export default new ChatMessages();
 ```
 
 ## Adding to Your Redux Store
@@ -171,13 +171,13 @@ The second argument (options) is used to pass an object containing the following
 | --- | --- |
 | `createSlice` | (REQUIRED) should be set to { createSlice } from '@reduxjs/toolkit'. |
 | `createSelector` | (REQUIRED) should be set to { createSelector } from '@reduxjs/toolkit'. |
-| `path` | (OPTIONAL) defaults to the lower-cased resourceName (first constructor arg), customizes the base path for the REST API default: "/<ResourceName>". |
+| `path` | (OPTIONAL) Customizes the base path of the URL for the REST API. Defaults to: `/${ResourceName}`. |
 | `fetchFunction` | (OPTIONAL) a function that will be called instead of directly calling window.fetch(). Use this to customize how requests are performed in your app. Defaults to (url, options) => window.fetch(url, options). |
 | `idField` | (OPTIONAL) Used to specify which field/property records should be unique by (for merging and sorting). Default: '_id' |
 
 ### Actions
 
-NOTE: The below action methods create and return action. The action must then be dispatched, in order to be executed.
+NOTE: The below action methods create and return an action object. The action must then be dispatched, in order to be executed.
 
 ```
   import { useDispatch } from 'react-redux';
