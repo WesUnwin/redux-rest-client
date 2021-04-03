@@ -17,8 +17,7 @@ This library internally uses window.fetch() to send requests, but can be configu
 
 ## Benefits
 
-* Implements functionality common to most modern web apps to interact with APIs, manage, sort, filter
-  records froms your database on the front-end.
+* Implements functionality common to most modern web apps to interact with APIs, manage, sort, and access records from your database.
 * Allows you to scale your app gracefully, defining new REST clients with minimal overhead.
 * Provides a clean, and consistent API throughout your app.
 * Supports request tracking, allowing you to build UI to display spinners, error messages, etc.
