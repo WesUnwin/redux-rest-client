@@ -220,6 +220,48 @@ class ReduxRESTClient {
   onRecordReceived(record) {
   }
 
+  // May be called externally for custom (non-REST) requests
+  doRequest(requestType, method, path, params = {}, onSuccess, onFailure) {
+    return dispatch => {
+      this._updateRequest(dispatch, requestType);
+
+      const onFetched = response => {
+        if (response.ok) {
+          if (onSuccess) {
+            // onSuccess function when provided is reponsible for:
+            // 1. Updating any record(s)
+            // 2. Afterwards onSuccess() must update the request info by calling:
+            //    this._updateRequest(dispatch, requestType, response, null, data
+            onSuccess(dispatch, response);
+          } else {
+            this._updateRequest(dispatch, requestType, response, null, data);
+          }
+        } else {
+          // Request completed but the server responded with an error status code (4XX/5XX)
+          if (onFailure) {
+            // onFailure if provided, is reponsible for calling:
+            // this._updateRequest(dispatch, requestType, response)
+            onFailure(dispatch, requestType, response);
+          } else {
+            this._updateRequest(dispatch, requestType, response);
+          }
+        }
+      };
+
+      const onRequestFailure = error => {
+        // Request failed (could not reach the server, so no response will be available)
+        if (onFailure) {
+          // onFailure if provided, is response for calling this._updateRequest(dispatch, requestType, null, error)
+          onFailure(dispatch, requestType, null, error);
+        } else {
+          this._updateRequest(dispatch, requestType, null, error);
+        }
+      };
+
+      return Requests.doRequest(method, path, params).then(onFetched, onRequestFailure);
+    };
+  }
+
   _updateRequest(dispatch, requestType, response, error, data) {
     const params = { requestType: requestType };
     if (response) {
