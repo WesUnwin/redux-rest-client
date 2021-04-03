@@ -15,6 +15,15 @@ This library internally uses window.fetch() to send requests, but can be configu
   npm install --save redux-rest-client
 ```
 
+## Benefits
+
+* Implements functionality common to most modern web apps to interact with APIs, manage, sort, filter
+  records froms your database on the front-end.
+* Allows you to scale your app gracefully, defining new REST clients with minimal overhead.
+* Provides a clean, and consistent API throughout your app.
+* Supports request tracking, allowing you to build UI to display spinners, error messages, etc.
+* Zero package dependencies! (keeping in mind you will want to use this in conjuction with redux)
+
 ## Setting Up Your ReduxRESTClient(s)
 To use this libary simply import ReduxRESTClient (the default export of this package) and begin creating sub-classes to configure
 the necessary REST resources for using your system's REST APIs.
@@ -118,26 +127,30 @@ Each sub-class of ReduxRESTClient that you create and add to your store can they
 ```
 
 ## Records
-Each ReduxRESTClient internaly stores an array of records (such as rows from a database) returned from the REST API.
-Each record must be unique by the field "_id". The "_id" is used to update records of the same "_id".
-Records are plain javascript objects.
+Each ReduxRESTClient instance internaly stores an array of records (such as rows from a database) returned from an associated REST API.
+Records are simply plain javascript objects, uniquely identified by some ID field (by default, this is the _id field, but this can be customized via options.idField).
+
+```
+  [ { _id: 'fxxwefw12eab1', ...}, { _id: 'fex1298eab2', ...}, ... ]
+```
 
 ## Commonizing Configuration Across Your App
 Depending on your situation you may want to introduce a super class to commonize configuration across all your rest clients.
-An easy way to achieve this is to create a class (lets call it RESTClientBase) that all your rest client's extend, that in turn extends ReduxRESTClient:
+An easy way to achieve this is to create a class (lets call it AppRESTClient) that all your rest clients extend, that in turn extends ReduxRESTClient:
 ```
-  ChatMessages, Accounts, ... => extends => RESTClientBase => extends ReduxRESTClient
+                                extends                    extends
+  ChatMessages, Accounts, ... ==========> AppRESTClient ==========> ReduxRESTClient
 ```
 
-Inside your RESTClientBase class, you can perform tasks that should be common to all rest clients:
+Inside your AppRESTClient class, you can perform tasks that should be common to all rest clients:
 ```
 import { createSlice, createSelector } from '@reduxjs/toolkit';
 import ReduxRESTClient from 'redux-rest-client';
 import UserAccount from 'client/features/UserAccount';
 
-class RESTClientBase extends ReduxRESTClient {
+class AppRESTClient extends ReduxRESTClient {
   constructor(resourceName, api = resourceName) {
-    super(resourceName, { path: `/api/${api}`, createSlice: createSlice, createSelector: createSelector, fetchFunction: RESTClientBase._fetchFunction });
+    super(resourceName, { path: `/api/${api}`, createSlice: createSlice, createSelector: createSelector, fetchFunction: AppRESTClient._fetchFunction });
   }
 
   static _fetchFunction(url, options) {
@@ -150,12 +163,12 @@ class RESTClientBase extends ReduxRESTClient {
   }
 }
 
-export default RESTClientBase;
+export default AppRESTClient;
 ```
 
 Now ChatMessages would become:
 ```
-class ChatMessages extends RESTClientBase {
+class ChatMessages extends AppRESTClient {
   ...
 }
 ```
