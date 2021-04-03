@@ -80,7 +80,7 @@ Each sub-class of ReduxRESTClient that you create and add to your store can they
     const requestStatus = useSelector(ChatMessages.getRequestStatus('fetch'));
     const error = useSelector(ChatMessages.getError('fetch'));
 
-    const closeAlerts = () => {
+    const clearError = () => {
       dispatch(ChatMessages.clearRequest('fetch'));
     };
 
@@ -96,7 +96,7 @@ Each sub-class of ReduxRESTClient that you create and add to your store can they
         }
 
         {error &&
-          <p style={{color: 'red'}} onClick={closeAlerts}>
+          <p style={{color: 'red'}} onClick={clearError}>
             {error.message}
           </p>
         }
@@ -113,6 +113,8 @@ Each sub-class of ReduxRESTClient that you create and add to your store can they
       </div>
     );
   }
+
+  export default ChatMessages;
 ```
 
 ## Records
@@ -220,7 +222,7 @@ NOTE: The below methods return a selector, and the selector must be used with us
 
 ### Sorting
 The list of records inside each rest client are sorted by _id by default. In ascending order (larger _id later in the array).
-You can customize the order of records are stored by using setSortFunction(function).
+You can customize the order of how records are stored by using setSortFunction(function).
 
 The default sort function is:
 ```
