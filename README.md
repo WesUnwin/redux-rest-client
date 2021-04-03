@@ -18,7 +18,7 @@ This library internally uses window.fetch() to send requests, but can be configu
 ## Benefits
 
 * Implements functionality common to most modern web apps to interact with APIs and to access/manage/sort/filter records from your database.
-* Allows your app to scale gracefully, defining new REST clients with minimal overhead.
+* Allows you to scale app gracefully, defining new REST clients with minimal overhead.
 * Provides a clean, and consistent API throughout your app.
 * Supports request tracking, allowing you to build UI to display spinners, error messages, etc.
 * Zero package dependencies! (keeping in mind you will want to use this in conjuction with redux)
