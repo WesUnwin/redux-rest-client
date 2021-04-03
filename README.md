@@ -21,7 +21,7 @@ This library internally uses window.fetch() to send requests, but can be configu
 * Allows you to scale your app gracefully, defining new REST clients with minimal overhead.
 * Provides a clean, and consistent API throughout your app.
 * Supports request tracking, allowing you to build UI to display spinners, error messages, etc.
-* Zero package dependencies! (keeping in mind you will want to use this in conjuction with redux)
+* Zero package dependencies! (keeping in mind you will want to use this in conjuction with redux).
 
 ## Setting Up Your ReduxRESTClient(s)
 To use this libary simply import ReduxRESTClient (the default export of this package) and begin creating sub-classes to configure
