@@ -186,7 +186,6 @@ Example custom request:
         return response.json().then(data => {
           dispatch(this._slice.actions.read({ records: [data] }));
           dispatch(this._slice.actions.updateRequest({ requestType: 'login', status: 'succeeded' }));
-          return data;
         });
       };
 
@@ -233,7 +232,7 @@ NOTE: The below action methods create and return an action object. The action mu
 | `fetchById(id)` | Returns an action that sends a GET request to <options.path>/id and stores the single record returned by the server inside the slice. |
 | `update(params)` | Returns an action that sends a PUT request to <options.path> and creates/updates a record in the slice using the server's response. |
 | `delete(params)` | Returns an action that sends a DELETE request to <options.path> then removes the record with the given _id from the list of records. |
-| `clearRequest(requestType)` | Returns an action that would clear the request status. This is done automatically starting a new request automatically.  |
+| `clearRequest(requestType)` | Returns an action that would clear the request status. This is done automatically upon starting a new request.  |
 
 
 ### Selectors
