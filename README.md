@@ -194,7 +194,7 @@ Example:
 
           // At a minimum, if providing an onSuccess handler you must call this:
           // NOTE: data is optional, if provided will be available in the request status state.
-          this._updateRequest(dispatch, 'fetchById', response, null, data);
+          this._updateRequest(dispatch, requestType, response, null, data);
         });
       };
 
