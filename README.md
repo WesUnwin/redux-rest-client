@@ -172,6 +172,46 @@ class ChatMessages extends AppRESTClient {
 }
 ```
 
+## Custom (Non-REST) Requests
+You may occassionallly want to send requests to custom APIs that may not be REST compatible.
+You can send custom requests, but still leverage some of the request handling logic of this library by using the doRequest() function.
+
+Example:
+```
+  class ChatMessages extends ReduxRESTClient {
+    ...
+
+    customRequest(params) {
+      const requestType = 'customRequest';
+
+      const onSuccess = (dispatch, response) => {
+        // Parse the response (if you want)
+        response.json().then(data => {
+
+          // Update any records if needed:
+          dispatch(this._slice.actions.read({ records: [data] }));
+
+          // At a minimum, if providing an onSuccess handler you must call this:
+          // NOTE: data is optional, if provided will be available in the request status state.
+          this._updateRequest(dispatch, 'fetchById', response, null, data);
+        });
+      };
+
+      // Custom error handling:
+      // OPTIONAL (if onFailure arg is not passed into doRequest(), the default functionality to update the request status will be executed)
+      const onFailure = (dispatch, requestType, response) {
+        // Do any custom handling here
+
+        // When passing an onFailure handler you must manually call this when done:
+        this._updateRequest(dispatch, requestType, response);
+      };
+
+      this.doRequest(requestType, 'POST', '/chat_messages/custom_request', params = {}, onSuccess, onFailure);
+    }
+
+  }
+```
+
 ## ReduxRESTClient API
 Your subclass will inherit actions - function that can be used to send requests to the associated REST API,
 and selectors that can be used read the list of records and hook components into re-rendering when needed.
