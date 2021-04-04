@@ -133,6 +133,37 @@ Records are simply plain javascript objects, uniquely identified by some ID fiel
   [ { _id: 'fxxwefw12eab1', ...}, { _id: 'fex1298eab2', ...}, ... ]
 ```
 
+### Sorting
+The list of records inside each rest client are sorted by _id by default. In ascending order (larger _id later in the array).
+You can customize the order of how records are stored by using setSortFunction(function).
+
+The default sort function is:
+```
+function(rec1, rec2) {
+  // Sort by id by default
+  if (rec1._id < rec2._id) return -1;
+  if (rec1._id > rec2._id) return 1;
+  return 0;
+}
+```
+
+Example: The below rest client keeps its records sorted by by the createdAt field.
+
+```
+class Messages extends ReduxRESTClient {
+  constructor() {
+    super('messaages', ...);
+    this.setSortFunction(function(rec1, rec2) {
+      // Most recently created accounts first, oldest last
+      if (rec1.createdAt > rec2.createdAt) return -1;
+      if (rec1.createdAt < rec2.createdAt) return 1;
+      return 0;
+    });
+  }
+}
+
+```
+
 ## Commonizing Configuration Across Your App
 Depending on your situation you may want to introduce a super class to commonize configuration across all your rest clients.
 An easy way to achieve this is to create a class (lets call it AppRESTClient) that all your rest clients extend, that in turn extends ReduxRESTClient:
@@ -254,17 +285,3 @@ NOTE: The below methods return a selector, and the selector must be used with us
 | `where(conditions)` | Returns a selector that returns all records matching the given conditions given as an object of key/value pairs eg. { attribute1: 'value1, ... }. |
 | `findBy(conditions)` | Same as where() but will return just the first matching record. |
 | `getRequestStatus(requestType)` | Returns an object of the form: ```{ status: 'pending'/'failed'/'succeeded', statusCode: 200, data: {}, error: ErrorObject }``` representing the state of the given request. Valid request types are: 'create', 'fetch', 'fetchById', 'update', 'delete'. |
-
-### Sorting
-The list of records inside each rest client are sorted by _id by default. In ascending order (larger _id later in the array).
-You can customize the order of how records are stored by using setSortFunction(function).
-
-The default sort function is:
-```
-function(rec1, rec2) {
-  // Sort by id by default
-  if (rec1._id < rec2._id) return -1;
-  if (rec1._id > rec2._id) return 1;
-  return 0;
-}
-```
