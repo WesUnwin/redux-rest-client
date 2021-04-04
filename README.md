@@ -134,18 +134,19 @@ Records are simply plain javascript objects, uniquely identified by some ID fiel
 ```
 
 ### Sorting
-The list of records inside each rest client are sorted by _id by default. In ascending order (larger _id later in the array).
-You can customize the order of how records are stored by using setSortFunction(function).
+The list of records inside each rest client are sorted by _id by default.
 
 The default sort function is:
 ```
 function(rec1, rec2) {
-  // Sort by id by default
+  // Sort by id by default, in ascending order (larger _id later in the array)
   if (rec1._id < rec2._id) return -1;
   if (rec1._id > rec2._id) return 1;
   return 0;
 }
 ```
+
+You can customize the order of how records are stored by using ```setSortFunction(function)```.
 
 Example:  To keep the list of records ordered by the createdAt field:
 
