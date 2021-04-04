@@ -147,7 +147,7 @@ function(rec1, rec2) {
 }
 ```
 
-Example: The below rest client keeps its records sorted by by the createdAt field.
+Example:  To keep the list of records ordered by the createdAt field:
 
 ```
 class Messages extends ReduxRESTClient {
