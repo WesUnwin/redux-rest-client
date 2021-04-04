@@ -176,7 +176,23 @@ class ChatMessages extends AppRESTClient {
 You may occassionallly want to send requests to custom APIs that may not be REST compatible.
 You can send custom requests, but still leverage some of the request handling logic of this library by using the doRequest() function.
 
-Example:
+Simple Example:
+```
+  login(params) {
+    const onLoginSuccess = (dispatch, response) => {
+      return response.json().then(data => {
+        dispatch(this._slice.actions.read({ records: [data] }));
+        dispatch(this._slice.actions.updateRequest({ requestType: 'login', status: 'succeeded' }));
+        return data;
+      });
+    };
+
+    return this.doRequest('login', 'POST', '/api/login', params, onLoginSuccess);
+  }
+
+```
+
+More Details:
 ```
   class ChatMessages extends ReduxRESTClient {
     ...
@@ -211,7 +227,7 @@ Example:
         });
       };
 
-      this.doRequest(requestType, 'POST', '/chat_messages/custom_request', params = {}, onSuccess, onFailure);
+      return this.doRequest(requestType, 'POST', '/chat_messages/custom_request', params = {}, onSuccess, onFailure);
     }
 
   }
