@@ -265,7 +265,7 @@ NOTE: The below action methods create and return an action object. The action mu
 | `update(params)` | Returns an action that sends a PUT request to <options.path> and creates/updates a record in the slice using the server's response. |
 | `delete(params)` | Returns an action that sends a DELETE request to <options.path> then removes the record with the given _id from the list of records. |
 | `clearRequest(requestType)` | Returns an action that would clear the request status. This is done automatically upon starting a new request.  |
-
+| `clear()` | Returns an action that would reset (clear) the entire state of this rest client, clearing the list of records, the isLoaded flag and all request statuses.  |
 
 ### Selectors
 Selectors in redux are how you read state, and respond to state changes.
