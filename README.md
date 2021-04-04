@@ -176,61 +176,24 @@ class ChatMessages extends AppRESTClient {
 You may occassionallly want to send requests to custom APIs that may not be REST compatible.
 You can send custom requests, but still leverage some of the request handling logic of this library by using the doRequest() function.
 
-Simple Example:
+Example custom request:
 ```
-  login(params) {
-    const onLoginSuccess = (dispatch, response) => {
-      return response.json().then(data => {
-        dispatch(this._slice.actions.read({ records: [data] }));
-        dispatch(this._slice.actions.updateRequest({ requestType: 'login', status: 'succeeded' }));
-        return data;
-      });
-    };
-
-    return this.doRequest('login', 'POST', '/api/login', params, onLoginSuccess);
-  }
-
-```
-
-More Details:
-```
-  class ChatMessages extends ReduxRESTClient {
+  ...
+  class UserAccount extends ReduxRESTClient {
     ...
-
-    customRequest(params) {
-      const requestType = 'customRequest';
-
-      // OPTIONAL
-      const onSuccess = (dispatch, response) => {
-        // Parse the response (if you want)
-        response.json().then(data => {
-
-          // Update any records if needed:
+    login(params) {
+      const onLoginSuccess = (dispatch, response) => {
+        return response.json().then(data => {
           dispatch(this._slice.actions.read({ records: [data] }));
-
-          // At a minimum, if providing an onSuccess handler you must call this:
-          // NOTE: data is optional, if provided will be available in the request status state.
-          this._updateRequest(dispatch, requestType, response, null, data);
+          dispatch(this._slice.actions.updateRequest({ requestType: 'login', status: 'succeeded' }));
+          return data;
         });
       };
 
-      // Custom error handling:
-      // OPTIONAL (if onFailure arg is not passed into doRequest(), the default functionality to update the request status will be executed)
-      const onFailure = (dispatch, requestType, response) {
-        // Do any custom handling here
-
-        // You may want to do custom error messages handling different from how the library's default handling works...
-        response.text().then(text => {
-
-          // When passing an onFailure handler you must manually call this when done:
-          this._updateRequest(dispatch, requestType, response);
-        });
-      };
-
-      return this.doRequest(requestType, 'POST', '/chat_messages/custom_request', params = {}, onSuccess, onFailure);
+      return this.doRequest('login', 'POST', '/api/login', params, onLoginSuccess);
     }
-
   }
+
 ```
 
 ## ReduxRESTClient API
