@@ -184,6 +184,7 @@ Example:
     customRequest(params) {
       const requestType = 'customRequest';
 
+      // OPTIONAL
       const onSuccess = (dispatch, response) => {
         // Parse the response (if you want)
         response.json().then(data => {
@@ -202,8 +203,12 @@ Example:
       const onFailure = (dispatch, requestType, response) {
         // Do any custom handling here
 
-        // When passing an onFailure handler you must manually call this when done:
-        this._updateRequest(dispatch, requestType, response);
+        // You may want to do custom error messages handling different from how the library's default handling works...
+        response.text().then(text => {
+
+          // When passing an onFailure handler you must manually call this when done:
+          this._updateRequest(dispatch, requestType, response);
+        });
       };
 
       this.doRequest(requestType, 'POST', '/chat_messages/custom_request', params = {}, onSuccess, onFailure);
