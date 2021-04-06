@@ -294,122 +294,62 @@ class ReduxRESTClient {
   }
 
   fetch(params = {}) {
-    return dispatch => {
-      this._updateRequest(dispatch, 'fetch');
+    const onSuccess = (dispatch, response) => {
+      return response.json().then(data => {
+        const records = Array.isArray(data) ? data : [data];
 
-      const onFetched = response => {
-        if (response.ok) {
-          response.json().then(data => {
-            const records = Array.isArray(data) ? data : [data];
-            records.forEach(rec => {
-              this.onRecordReceived(rec);
-            });
-            dispatch(this._slice.actions.read({ records: records }));
-            this._updateRequest(dispatch, 'fetch', response, null, data);
-          });
-        } else {
-          this._updateRequest(dispatch, 'fetch', response);
-        }
-      };
+        records.forEach(rec => this.onRecordReceived(rec));
 
-      const onFailure = error => {
-        this._updateRequest(dispatch, 'fetch', null, error);
-      };
+        dispatch(this._slice.actions.read({ records: records }));
+        this._updateRequest(dispatch, 'fetch', response, null, data);
+      });
+    };
 
-      return Requests.doRequest('GET', this.path, params).then(onFetched, onFailure);
-    };    
+    return this.doRequest('fetch', 'GET', this.path, params, onSuccess);
   }
 
   fetchById(id) {
-    return dispatch => {
-      this._updateRequest(dispatch, 'fetchById');
-
-      const onFetched = response => {
-        if (response.ok) {
-          response.json().then(data => {
-            this.onRecordReceived(data);
-            dispatch(this._slice.actions.read({ records: [data] }));
-            this._updateRequest(dispatch, 'fetchById', response, null, data);
-          });
-        } else {
-          this._updateRequest(dispatch, 'fetchById', response);
-        }
-      };
-
-      const onFailure = error => {
-        this._updateRequest(dispatch, 'fetchById', null, error);
-      };
-
-      return Requests.doRequest('GET', `${this.path}/${id}`).then(onFetched, onFailure);
+    const onSuccess = (dispatch, response) => {
+      return response.json().then(data => {
+        this.onRecordReceived(data);
+        dispatch(this._slice.actions.read({ records: [data] }));
+        this._updateRequest(dispatch, 'fetchById', response, null, data);
+      });
     };
+
+    return this.doRequest('fetchById', 'GET', `${this.path}/${id}`, {}, onSuccess);
   }
 
-  create(params) {
-    return dispatch => {
-      this._updateRequest(dispatch, 'create');
-
-      const onCreated = response => {
-        if (response.ok) {
-          response.json().then(data => {
-            this.onRecordReceived(data);
-            dispatch(this._slice.actions.created({ records: [data] }));
-            this._updateRequest(dispatch, 'create', response, null, data);
-          });
-        } else {
-          this._updateRequest(dispatch, 'create', response);
-        }
-      };
-
-      const onFailure = error => {
-        this._updateRequest(dispatch, 'create', null, error);
-      };
-
-      return Requests.doRequest('POST', this.path, params).then(onCreated, onFailure);
-    };    
-  }
-
-  update(params) {
-    return dispatch => {
-      this._updateRequest(dispatch, 'update');
-
-      const onUpdated = response => {
-        if (response.ok) {
-          response.json().then(data => {
-            dispatch(this._slice.actions.updated({ records: [data] }));
-            this._updateRequest(dispatch, 'update', response, null, data);
-          });
-        } else {
-          this._updateRequest(dispatch, 'update', response);
-        }
-      };
-
-      const onFailure = error => {
-        this._updateRequest(dispatch, 'update', null, error);
-      };
-
-      return Requests.doRequest('PUT', this.path, params).then(onUpdated, onFailure);
-    };    
-  }
-
-  delete(params) {
-    return dispatch => {
-      this._updateRequest(dispatch, 'delete');
-
-      const onDeleted = response => {
-        if (response.ok) {
-          dispatch(this._slice.actions.deleted(params));
-          this._updateRequest(dispatch, 'delete', response, null, params);
-        } else {
-          this._updateRequest(dispatch, 'delete', response);
-        }
-      };
-
-      const onFailure = error => {
-        this._updateRequest(dispatch, 'delete', null, error);
-      };
-
-      return Requests.doRequest('DELETE', this.path, params).then(onDeleted, onFailure);
+  create(params = {}) {
+    const onSuccess = (dispatch, response) => {
+      return response.json().then(data => {
+        this.onRecordReceived(data);
+        dispatch(this._slice.actions.created({ records: [data] }));
+        this._updateRequest(dispatch, 'create', response, null, data);
+      });
     };
+
+    return this.doRequest('create', 'POST', this.path, params, onSuccess);
+  }
+
+  update(params = {}) {
+    const onSuccess = (dispatch, response) => {
+      return response.json().then(data => {
+        dispatch(this._slice.actions.updated({ records: [data] }));
+        this._updateRequest(dispatch, 'update', response, null, data);
+      });
+    };
+
+    return this.doRequest('update', 'PUT', this.path, params, onSuccess);
+  }
+
+  delete(params = {}) {
+    const onSuccess = (dispatch, response) => {
+      dispatch(this._slice.actions.deleted(params));
+      this._updateRequest(dispatch, 'delete', response, null, params);
+    };
+
+    return this.doRequest('delete', 'DELETE', this.path, params, onSuccess);
   }
 
   clear() {
